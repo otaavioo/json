@@ -1,7 +1,5 @@
 <?php
-namespace Softers;
-
-use Softers\Error\Message;
+namespace Json;
 
 class Json
 {
