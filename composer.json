@@ -1,0 +1,17 @@
+{
+    "name": "json/json",
+    "description": "A class to use the basic of json.",
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "authors": [{
+        "name": "Otávio Augusto Borges Pinto",
+        "email": "otaviobpinto@gmail.com"
+    }],
+    "require": {},
+    "autoload": {
+        "psr-0": {
+            "Json": ""
+        }
+    }
+}
