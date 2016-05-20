@@ -48,9 +48,18 @@ class JsonTest extends \PHPUnit_Framework_TestCase
      * @depends methodDecodeShouldExist
      * @expectedException InvalidArgumentException
      */
-    public function itMustThrowInvalidArgumentExceptionIfReceivesInvalidParams()
+    public function itMustThrowInvalidArgumentExceptionIfReceivesInvalidJson()
     {
         $this->assertFalse($this->class->decode('[key => value]'), 'It must be a valid json');
+    }
+
+    /**
+     * @test
+     * @depends methodDecodeShouldExist
+     * @expectedException InvalidArgumentException
+     */
+    public function itMustThrowInvalidArgumentExceptionIfReceivesInvalidType()
+    {
         $this->assertFalse($this->class->decode(json_encode(['key' => 'value']), null), 'It must be a valid type');
     }
 
