@@ -3,10 +3,10 @@ namespace Json;
 
 class Json
 {
-    /*const T_OBJECT = 0;
-    const T_ARRAY = 1;
+    const T_OBJECT = false;
+    const T_ARRAY = true;
 
-    const MYSQL_TEXT = 'text';
+    /*const MYSQL_TEXT = 'text';
     const MYSQL_TEXT_SIZE = 65535;*/
 
     public function isJson($json)
@@ -15,14 +15,18 @@ class Json
         return (json_last_error() == JSON_ERROR_NONE) && !is_null($obj);
     }
 
-    /*public static function decode($json, $type = self::T_OBJECT)
+    public function decode($json, $type = self::T_OBJECT)
     {
-        if ($type === self::T_OBJECT) {
-            return json_decode($json);
+        if (!$this->isJson($json)) {
+            throw new \InvalidArgumentException("Invalid Json: $json", 100);
         }
 
-        return json_decode($json, self::T_ARRAY);
-    }*/
+        if (!in_array($type, [self::T_OBJECT, self::T_ARRAY], true)) {
+            throw new \InvalidArgumentException("Invalid decode type: $type", 101);
+        }
+
+        return json_decode($json, $type);
+    }
 
     /*public static function encode($json, $mysqlField = self::MYSQL_TEXT)
     {
