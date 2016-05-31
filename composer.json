@@ -9,11 +9,11 @@
         "email": "otaviobpinto@gmail.com"
     }],
     "require": {
-        "php": ">=5.6.0"
+        "php": ">=5.5.0"
     },
     "autoload": {
-        "psr-0": {
-            "Json": ""
+        "psr-4": {
+            "Json\\": "src/Json/"
         }
     }
 }
