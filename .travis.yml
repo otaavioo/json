@@ -8,3 +8,10 @@ install:
 
 script:
   - ./vendor/bin/phpunit
+
+notifications:
+  email:
+    recipients:
+      - otaviobpinto@gmail.com
+    on_success: never
+    on_failure: always
