@@ -8,6 +8,7 @@ install:
 
 script:
   - ./vendor/bin/phpunit
+  - bin/atoum --test-all
 
 notifications:
   email:
