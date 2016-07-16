@@ -6,5 +6,18 @@ php:
 install:
   - composer install
 
+before_script:
+  - mkdir -p build/logs
+
 script:
-  - ./vendor/bin/phpunit
+  - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - php vendor/bin/coveralls -v
+
+notifications:
+  email:
+    recipients:
+      - otaviobpinto@gmail.com
+    on_success: never
+    on_failure: always
