@@ -73,4 +73,12 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $this->class->decode(json_encode($array), true), 'It must be a valid array');
         $this->assertInternalType('object', $this->class->decode(json_encode($array), false), 'It must be a valid object');
     }
+
+    /**
+     * @test
+     */
+    public function methodEncodeShouldExist()
+    {
+        $this->assertTrue(method_exists($this->class, 'encode'), 'method encode should exist');
+    }
 }

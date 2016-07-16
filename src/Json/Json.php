@@ -28,7 +28,7 @@ class Json
         return json_decode($json, $type);
     }
 
-    /*public static function encode($json, $mysqlField = self::MYSQL_TEXT)
+    /*public function encode($json)
     {
         $jsonEncode = json_encode($json);
 
@@ -37,7 +37,7 @@ class Json
         }
 
         if (!empty($error = self::jsonLastErrorMsg())) {
-            return (new Message(Message::JSON_ENCODE_ERROR, $error))->toArray();
+            throw new \InvalidArgumentException("Invalid decode type: $type", 101);
         }
 
         return (new Message(Message::JSON_ENCODE_ERROR, 'Too large size - '.self::MYSQL_TEXT_SIZE.' caracteres'))->toArray();
@@ -62,7 +62,7 @@ class Json
         return true;
     }*/
 
-    /*private static function jsonLastErrorMsg()
+    /*private function jsonLastErrorMsg()
     {
         $error = json_last_error_msg();
         if ($error === 'No error') {
