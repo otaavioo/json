@@ -33,6 +33,6 @@ class Json
     public function isJson($json)
     {
         $obj = json_decode($json);
-        return (json_last_error() == JSON_ERROR_NONE) && !is_null($obj);
+        return (json_last_error() == JSON_ERROR_NONE) && !is_null($obj) && is_object($obj);
     }
 }
