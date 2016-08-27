@@ -15,18 +15,17 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Json\Json', $this->class, 'It must be an instance of Json\Json');
     }
 
-    public function testMethodIsJsonShouldExist()
+    public function testMethodHasErrorShouldExist()
     {
-        $this->assertTrue(method_exists($this->class, 'isJson'), 'method isJson should exist');
+        $this->assertTrue(method_exists($this->class, 'hasError'), 'method hasError should exist');
     }
 
     /**
-     * @depends testMethodIsJsonShouldExist
+     * @depends testMethodHasErrorShouldExist
      */
     public function testItCanValidateJson()
     {
-        $this->assertTrue($this->class->isJson(json_encode(['key' => 'value'])), 'It must be a valid json');
-        $this->assertFalse($this->class->isJson('[key => value]'), 'It must be a wrong json');
+        $this->assertTrue($this->class->hasError(null), 'It must be a valid json');
     }
 
     public function testMethodDecodeShouldExist()
@@ -47,6 +46,15 @@ class JsonTest extends \PHPUnit_Framework_TestCase
      * @depends testMethodDecodeShouldExist
      * @expectedException InvalidArgumentException
      */
+    public function testItMustThrowInvalidArgumentExceptionIfReceivesInvalidType2()
+    {
+        $this->class->decode('2016-08-26', true);
+    }
+
+    /**
+     * @depends testMethodDecodeShouldExist
+     * @expectedException InvalidArgumentException
+     */
     public function testItMustThrowInvalidArgumentExceptionIfReceivesInvalidType()
     {
         $this->class->decode(json_encode(['key' => 'value']), null);
@@ -60,6 +68,17 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $array = ['key' => 'value'];
         $this->assertInternalType('array', $this->class->decode(json_encode($array), true), 'It must be a valid array');
         $this->assertInternalType('object', $this->class->decode(json_encode($array), false), 'It must be a valid object');
+    }
+
+    /**
+     * @depends testMethodDecodeShouldExist
+     */
+    public function testItCanDecodedJsonRecursively()
+    {
+        $array = ['key' => 'value'];
+        $jsonEncodeTwice = json_encode(json_encode($array));
+
+        $this->assertInternalType('array', $this->class->decode($jsonEncodeTwice, true), 'It must be a valid array');
     }
 
     public function testMethodEncodeShouldExist()
