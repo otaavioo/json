@@ -1,5 +1,5 @@
 {
-    "name": "json/json",
+    "name": "otaavioo/json",
     "description": "A class to use the basic of json.",
     "require-dev": {
         "phpunit/phpunit": "*"
