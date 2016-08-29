@@ -9,68 +9,109 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         $this->class = new Json();
     }
-    /**
-     * @test
-     */
-    public function itCanBeAJsonInstance()
+
+    public function testItCanBeAJsonInstance()
     {
         $this->assertInstanceOf('Json\Json', $this->class, 'It must be an instance of Json\Json');
     }
 
-    /**
-     * @test
-     */
-    public function methodIsJsonShouldExist()
+    public function testMethodHasErrorShouldExist()
     {
-        $this->assertTrue(method_exists($this->class, 'isJson'), 'method isJson should exist');
+        $this->assertTrue(method_exists($this->class, 'hasError'), 'method hasError should exist');
     }
 
     /**
-     * @test
-     * @depends methodIsJsonShouldExist
+     * @depends testMethodHasErrorShouldExist
      */
-    public function itCanValidateJson()
+    public function testItCanValidateJson()
     {
-        $this->assertTrue($this->class->isJson(json_encode(['key' => 'value'])), 'It must be a valid json');
-        $this->assertFalse($this->class->isJson('[key => value]'), 'It must be a wrong json');
+        $this->assertTrue($this->class->hasError(null), 'It must be a valid json');
     }
 
-    /**
-     * @test
-     */
-    public function methodDecodeShouldExist()
+    public function testMethodDecodeShouldExist()
     {
         $this->assertTrue(method_exists($this->class, 'decode'), 'method decode should exist');
     }
 
     /**
-     * @test
-     * @depends methodDecodeShouldExist
+     * @depends testMethodDecodeShouldExist
      * @expectedException InvalidArgumentException
      */
-    public function itMustThrowInvalidArgumentExceptionIfReceivesInvalidJson()
+    public function testItMustThrowInvalidArgumentExceptionIfReceivesInvalidJson()
     {
-        $this->assertFalse($this->class->decode('[key => value]'), 'It must be a valid json');
+        $this->class->decode('[key => value]');
     }
 
     /**
-     * @test
-     * @depends methodDecodeShouldExist
+     * @depends testMethodDecodeShouldExist
      * @expectedException InvalidArgumentException
      */
-    public function itMustThrowInvalidArgumentExceptionIfReceivesInvalidType()
+    public function testItMustThrowInvalidArgumentExceptionIfReceivesInvalidType2()
     {
-        $this->assertFalse($this->class->decode(json_encode(['key' => 'value']), null), 'It must be a valid type');
+        $this->class->decode('2016-08-26', true);
     }
 
     /**
-     * @test
-     * @depends methodDecodeShouldExist
+     * @depends testMethodDecodeShouldExist
+     * @expectedException InvalidArgumentException
      */
-    public function itCanReturnADecodedJson()
+    public function testItMustThrowInvalidArgumentExceptionIfReceivesInvalidType()
+    {
+        $this->class->decode(json_encode(['key' => 'value']), null);
+    }
+
+    /**
+     * @depends testMethodDecodeShouldExist
+     */
+    public function testItCanReturnADecodedJson()
     {
         $array = ['key' => 'value'];
         $this->assertInternalType('array', $this->class->decode(json_encode($array), true), 'It must be a valid array');
         $this->assertInternalType('object', $this->class->decode(json_encode($array), false), 'It must be a valid object');
+    }
+
+    /**
+     * @depends testMethodDecodeShouldExist
+     */
+    public function testItCanDecodedJsonRecursively()
+    {
+        $array = ['key' => 'value'];
+        $jsonEncodeTwice = json_encode(json_encode($array));
+
+        $this->assertInternalType('array', $this->class->decode($jsonEncodeTwice, true), 'It must be a valid array');
+    }
+
+    public function testMethodEncodeShouldExist()
+    {
+        $this->assertTrue(method_exists($this->class, 'encode'), 'method encode should exist');
+    }
+
+    /**
+     * @depends testMethodEncodeShouldExist
+     * @expectedException Exception
+     * @expectedExceptionMessage Json encode error: Malformed UTF-8 characters, possibly incorrectly encoded
+     */
+    public function testItMustThrowInvalidArgumentExceptionIfReceivesInvalidArray()
+    {
+        $this->class->encode("\xB1\x31");
+    }
+
+    /**
+     * @depends testMethodEncodeShouldExist
+     */
+    public function testItCanReturnAnEncodedJsonWithAnArrayPassedByParameter()
+    {
+        $array = ['key' => 'value'];
+        $this->assertSame('{"key":"value"}', $this->class->encode($array));
+    }
+
+    /**
+     * @depends testMethodEncodeShouldExist
+     */
+    public function testItCanReturnAnEncodedJsonWithAnObjectPassedByParameter()
+    {
+        $obj = new \stdClass();
+        $obj->key = 'value';
+        $this->assertSame('{"key":"value"}', $this->class->encode($obj));
     }
 }

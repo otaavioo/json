@@ -6,69 +6,50 @@ class Json
     const T_OBJECT = false;
     const T_ARRAY = true;
 
-    /*const MYSQL_TEXT = 'text';
-    const MYSQL_TEXT_SIZE = 65535;*/
-
-    public function isJson($json)
-    {
-        $obj = json_decode($json);
-        return (json_last_error() == JSON_ERROR_NONE) && !is_null($obj);
-    }
+    private $type;
 
     public function decode($json, $type = self::T_OBJECT)
     {
-        if (!$this->isJson($json)) {
-            throw new \InvalidArgumentException("Invalid Json: $json", 100);
+        $this->type = $type;
+
+        if (!in_array($this->type, [self::T_OBJECT, self::T_ARRAY], true)) {
+            throw new \InvalidArgumentException("Invalid decode type: $this->type", 1000);
         }
 
-        if (!in_array($type, [self::T_OBJECT, self::T_ARRAY], true)) {
-            throw new \InvalidArgumentException("Invalid decode type: $type", 101);
+        $jsonDecode = $this->decodeRecursive($json, $this->type);
+
+        if ($this->hasError($jsonDecode)) {
+            throw new \InvalidArgumentException("Invalid Json: $json", 1001);
         }
 
-        return json_decode($json, $type);
+        return $jsonDecode;
     }
 
-    /*public static function encode($json, $mysqlField = self::MYSQL_TEXT)
+    public function encode($json)
     {
         $jsonEncode = json_encode($json);
 
-        if (self::isValid($jsonEncode, $mysqlField)) {
-            return json_encode($json);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception('Json encode error: ' . json_last_error_msg());
         }
 
-        if (!empty($error = self::jsonLastErrorMsg())) {
-            return (new Message(Message::JSON_ENCODE_ERROR, $error))->toArray();
-        }
+        return $jsonEncode;
+    }
 
-        return (new Message(Message::JSON_ENCODE_ERROR, 'Too large size - '.self::MYSQL_TEXT_SIZE.' caracteres'))->toArray();
-    }*/
-
-    /*********************
-     * PRIVATE FUNCTIONS *
-     *********************/
-    /**
-     * Valida o tamanho máximo da string json para campo text do mysql
-     * @access private
-     * @param  string $json Json_encode
-     * @param  string $mysqlField Constantes da classe prefixadas em MYSQL_
-     * @return boolean
-     */
-    /*private static function isValid($jsonEncode, $mysqlField)
+    public function hasError($json)
     {
-        if ($mysqlField === self::MYSQL_TEXT) {
-            return strlen($jsonEncode) <= self::MYSQL_TEXT_SIZE;
-        }
+        $isArrayOrObject = ($this->type === self::T_OBJECT) ? !is_object($json) : !is_array($json);
+        return (json_last_error() !== JSON_ERROR_NONE) || is_null($json) || $isArrayOrObject;
+    }
 
-        return true;
-    }*/
-
-    /*private static function jsonLastErrorMsg()
+    private function decodeRecursive($json)
     {
-        $error = json_last_error_msg();
-        if ($error === 'No error') {
-            return '';
+        $decodedJson = json_decode($json, $this->type);
+
+        if (is_string($decodedJson)) {
+            return $this->decodeRecursive($decodedJson, $this->type);
         }
 
-        return $error;
-    }*/
+        return $decodedJson;
+    }
 }
