@@ -1,15 +1,15 @@
 {
     "name": "otaavioo/json",
     "description": "A class to use the basic of json.",
-    "require-dev": {
-        "phpunit/phpunit": "*"
-    },
     "authors": [{
         "name": "Otávio Augusto Borges Pinto",
         "email": "otaviobpinto@gmail.com"
     }],
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=5.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
         "satooshi/php-coveralls": "~0.6@stable"
     },
     "autoload": {

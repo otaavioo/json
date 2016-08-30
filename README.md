@@ -24,7 +24,7 @@ A light package for json encode/decode functions
     // And then, get decoded json
     echo $json->decode($string);
 
-    // And if you have a json doubly encoded, like this
+    // And if you have a doubly encoded json, like this
     $string = '{\"key\":\"value\"}';
 
     // The decode method will return the same object as before
