@@ -3,6 +3,12 @@
 
 A light package for json encode/decode functions
 
+## Installing
+
+```
+composer require otaavioo/json ^1.0
+```
+
 #### Encode
 ```php
     // Instantiate the class
