@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Json\\": "src/"
+            "Json\\": "src/Json"
         }
     }
 }
