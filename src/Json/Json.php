@@ -52,4 +52,10 @@ class Json
 
         return $decodedJson;
     }
+
+    public function isValid($json)
+    {
+        $obj = json_decode($json);
+        return (json_last_error() == JSON_ERROR_NONE) && !is_null($obj);
+    }
 }

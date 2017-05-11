@@ -114,4 +114,40 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $obj->key = 'value';
         $this->assertSame('{"key":"value"}', $this->class->encode($obj));
     }
+
+    public function testItMustReturnTrueWhenJsonIsValid()
+    {
+        $this->assertTrue(
+            method_exists($this->class, 'isValid'),
+            '"isValid" method must exist'
+        );
+
+        $jsonTest = json_encode(
+            [
+                'foo',
+                'bar',
+                'foo' => 'bar'
+            ]
+        );
+
+        $this->assertTrue(
+            $this->class->isValid($jsonTest),
+            'It should return true'
+        );
+    }
+
+    public function testItMustReturnFalseWhenJsonIsNotValid()
+    {
+        $this->assertTrue(
+            method_exists($this->class, 'isValid'),
+            '"isValid" method must exist'
+        );
+
+        $jsonTest = 'foobar';
+
+        $this->assertFalse(
+            $this->class->isValid($jsonTest),
+            'It should return false'
+        );
+    }
 }
