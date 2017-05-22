@@ -150,4 +150,19 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             'It should return false'
         );
     }
+
+    public function testItMustReturnNullWhenJsonIsNotValid()
+    {
+        $this->assertTrue(
+            method_exists($this->class, 'decode'),
+            '"decode" method must exist'
+        );
+
+        $jsonTest = '';
+
+        $this->assertNull(
+            $this->class->decode($jsonTest),
+            'It should return null'
+        );
+    }
 }

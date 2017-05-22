@@ -10,6 +10,10 @@ class Json
 
     public function decode($json, $type = self::T_OBJECT)
     {
+        if (empty($json)) {
+            return null;
+        }
+
         $this->type = $type;
 
         if (!in_array($this->type, [self::T_OBJECT, self::T_ARRAY], true)) {
