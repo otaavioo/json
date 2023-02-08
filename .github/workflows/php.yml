@@ -60,7 +60,7 @@ jobs:
         COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         composer global require php-coveralls/php-coveralls
-        export PATH=~/.config/composer/vendor/bin:$PATH
+        export PATH="$(composer config -g home)/vendor/bin:$PATH"
         php-coveralls --coverage_clover=build/logs/7.2/clover.xml -v
 
   test-73:
@@ -91,7 +91,7 @@ jobs:
         COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         composer global require php-coveralls/php-coveralls
-        export PATH=~/.config/composer/vendor/bin:$PATH
+        export PATH="$(composer config -g home)/vendor/bin:$PATH"
         php-coveralls --coverage_clover=build/logs/7.3/clover.xml -v
 
   test-74:
@@ -122,5 +122,5 @@ jobs:
         COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         composer global require php-coveralls/php-coveralls
-        export PATH=~/.config/composer/vendor/bin:$PATH
+        export PATH="$(composer config -g home)/vendor/bin:$PATH"
         php-coveralls --coverage_clover=build/logs/7.4/clover.xml -v
