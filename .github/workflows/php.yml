@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   composer-check:
-    permissions: write-all
+    name: Composer Check
 
     runs-on: ubuntu-latest
 
@@ -33,9 +33,18 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-  test-72:
+  unit-test:
+    name: Unit Test
 
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+        - '7.2'
+        - '7.3'
+        - '7.4'
 
     steps:
     - uses: actions/checkout@v3
@@ -50,81 +59,14 @@ jobs:
       uses: php-actions/phpunit@v3
       with:
         version: 6.0
-        php_version: 7.2
+        php_version: ${{ matrix.php-version }}
         php_extensions: xdebug
         configuration: phpunit.xml
-        args: --coverage-clover build/logs/7.2/clover.xml
+        args: --coverage-clover build/logs/clover.xml
       env:
         XDEBUG_MODE: coverage
-    - name: Upload coverage results to Coveralls
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        composer global require php-coveralls/php-coveralls
-        export PATH="$(composer config -g home)/vendor/bin:$PATH"
-        sudo mkdir -p build/output/
-        php-coveralls --coverage_clover=build/logs/7.2/clover.xml -v  --json_path=build/output/
 
-  test-73:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
-    - name: Run test suite
-      uses: php-actions/phpunit@v3
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
       with:
-        version: 6.0
-        php_version: 7.3
-        php_extensions: xdebug
-        configuration: phpunit.xml
-        args: --coverage-clover build/logs/7.3/clover.xml
-      env:
-        XDEBUG_MODE: coverage
-    - name: Upload coverage results to Coveralls
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        composer global require php-coveralls/php-coveralls
-        export PATH="$(composer config -g home)/vendor/bin:$PATH"
-        sudo mkdir -p build/output/
-        php-coveralls --coverage_clover=build/logs/7.3/clover.xml -v
-
-  test-74:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
-    - name: Run test suite
-      uses: php-actions/phpunit@v3
-      with:
-        version: 6.0
-        php_version: 7.4
-        php_extensions: xdebug
-        configuration: phpunit.xml
-        args: --coverage-clover build/logs/7.4/clover.xml
-      env:
-        XDEBUG_MODE: coverage
-    - name: Upload coverage results to Coveralls
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        composer global require php-coveralls/php-coveralls
-        export PATH="$(composer config -g home)/vendor/bin:$PATH"
-        sudo mkdir -p build/output/
-        php-coveralls --coverage_clover=build/logs/7.4/clover.xml -v
+        github-token: ${{ secrets.GITHUB_TOKEN }}
