@@ -200,6 +200,19 @@ class JsonTest extends TestCase
         );
     }
 
+    /**
+     * @depends testMethodIsValidShouldExist
+     */
+    public function testItMustReturnFalseWhenJsonIsAStringOfNumberNotValid()
+    {
+        $jsonTest = '2';
+
+        $this->assertFalse(
+            $this->class->isValid($jsonTest),
+            'It should return false'
+        );
+    }
+
     public function testItMustReturnNullWhenJsonIsNotValid()
     {
         $jsonTest = '';
