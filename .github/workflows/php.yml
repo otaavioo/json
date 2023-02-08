@@ -61,7 +61,8 @@ jobs:
       run: |
         composer global require php-coveralls/php-coveralls
         export PATH="$(composer config -g home)/vendor/bin:$PATH"
-        php-coveralls --coverage_clover=build/logs/7.2/clover.xml -v
+        mkdir build/output/
+        php-coveralls --coverage_clover=build/logs/7.2/clover.xml -v  --json_path=build/output/
 
   test-73:
 
