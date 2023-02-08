@@ -18,7 +18,6 @@ jobs:
       - checkout
 
       - run: sudo apt update
-      - run: sudo -E install-php-extensions json
       - run: composer install -n --prefer-dist
 
       # run tests with phpunit
