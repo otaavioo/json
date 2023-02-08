@@ -1,7 +1,7 @@
 # JSON
 
 [![Build Status](https://circleci.com/gh/otaavioo/json/tree/main.svg?style=shield)](https://circleci.com/gh/otaavioo/json/?branch=main)
-[![Coverage Status](https://coveralls.io/repos/github/otaavioo/json/badge.svg?branch=master)](https://coveralls.io/github/otaavioo/json?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/otaavioo/json/badge.svg?branch=main)](https://coveralls.io/github/otaavioo/json?branch=main)
 
 A light package for json encode/decode functions
 
