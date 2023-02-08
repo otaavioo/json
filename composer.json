@@ -25,5 +25,6 @@
             "php": "7.3.33"
         },
         "sort-packages": true
-    }
+    },
+    "license": "MIT"
 }

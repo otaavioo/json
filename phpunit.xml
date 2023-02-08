@@ -25,6 +25,7 @@
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-html" target="./tests/_coverage-html/"/>
+        <log type="coverage-html" target="build/logs/html/"/>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
 </phpunit>
