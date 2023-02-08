@@ -24,6 +24,7 @@ jobs:
       id: composer-cache
       uses: actions/cache@v3
       with:
+        php-version: 7.2
         path: vendor
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
@@ -36,4 +37,6 @@ jobs:
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
     - name: Run test suite
+      with:
+        php-version: 7.2
       run: ./vendor/bin/phpunit
