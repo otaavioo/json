@@ -55,3 +55,51 @@ jobs:
         args: --coverage-clover build/logs/clover.xml
       env:
         XDEBUG_MODE: coverage
+
+  test-73:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Run test suite
+      uses: php-actions/phpunit@v3
+      with:
+        version: 6.0
+        php_version: 7.3
+        php_extensions: xdebug
+        configuration: phpunit.xml
+        args: --coverage-clover build/logs/clover.xml
+      env:
+        XDEBUG_MODE: coverage
+
+  test-74:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Run test suite
+      uses: php-actions/phpunit@v3
+      with:
+        version: 6.0
+        php_version: 7.4
+        php_extensions: xdebug
+        configuration: phpunit.xml
+        args: --coverage-clover build/logs/clover.xml
+      env:
+        XDEBUG_MODE: coverage
