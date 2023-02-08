@@ -40,3 +40,23 @@ composer require otaavioo/json ^2.0
     // The decode method will return the same object as before
     echo $json->decode($string);
 ```
+
+### Valid
+
+```php
+    // Instantiate the class
+    $json = new Json();
+
+    $string = '{"key":"value"}';
+
+    // And then, check if is valid
+    echo $json->isValid($string);
+```
+
+## Developing
+
+- To install dependencies, please, run `composer install`
+
+### Testing
+
+- You can simply run `php vendor/bin/phpunit` to test using PHPUnit

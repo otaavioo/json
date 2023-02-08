@@ -9,7 +9,7 @@ class Json
 
     private $type;
 
-    public function decode($json, $type = self::T_OBJECT)
+    public function decode(string $json, $type = self::T_OBJECT)
     {
         if (empty($json)) {
             return null;
@@ -30,7 +30,7 @@ class Json
         return $jsonDecode;
     }
 
-    public function encode($json)
+    public function encode($json): string
     {
         $jsonEncode = json_encode($json);
 
@@ -41,7 +41,7 @@ class Json
         return $jsonEncode;
     }
 
-    public function hasError($json)
+    public function hasError($json): bool
     {
         $isArrayOrObject = ($this->type === self::T_OBJECT) ? !is_object($json) : !is_array($json);
         return (json_last_error() !== JSON_ERROR_NONE) || is_null($json) || $isArrayOrObject;
@@ -58,7 +58,7 @@ class Json
         return $decodedJson;
     }
 
-    public function isValid($json)
+    public function isValid(string $json): bool
     {
         $obj = json_decode($json);
         return (json_last_error() == JSON_ERROR_NONE) && !is_null($obj) && $json != $obj;
