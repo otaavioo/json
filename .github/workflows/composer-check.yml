@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  composer-check:
 
     runs-on: ubuntu-latest
 
