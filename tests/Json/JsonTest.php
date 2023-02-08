@@ -1,10 +1,14 @@
 <?php
+
 namespace Json;
 
 use Json\Json;
+use PHPUnit\Framework\TestCase;
 
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends TestCase
 {
+    private $class;
+
     public function setUp()
     {
         $this->class = new Json();
@@ -12,12 +16,19 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
     public function testItCanBeAJsonInstance()
     {
-        $this->assertInstanceOf('Json\Json', $this->class, 'It must be an instance of Json\Json');
+        $this->assertInstanceOf(
+            'Json\Json',
+            $this->class,
+            'It must be an instance of Json\Json'
+        );
     }
 
     public function testMethodHasErrorShouldExist()
     {
-        $this->assertTrue(method_exists($this->class, 'hasError'), 'method hasError should exist');
+        $this->assertTrue(
+            method_exists($this->class, 'hasError'),
+            'method hasError should exist'
+        );
     }
 
     /**
@@ -25,12 +36,18 @@ class JsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testItCanValidateJson()
     {
-        $this->assertTrue($this->class->hasError(null), 'It must be a valid json');
+        $this->assertTrue(
+            $this->class->hasError(null),
+            'It must be a valid json'
+        );
     }
 
     public function testMethodDecodeShouldExist()
     {
-        $this->assertTrue(method_exists($this->class, 'decode'), 'method decode should exist');
+        $this->assertTrue(
+            method_exists($this->class, 'decode'),
+            'method decode should exist'
+        );
     }
 
     /**
@@ -66,8 +83,18 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     public function testItCanReturnADecodedJson()
     {
         $array = ['key' => 'value'];
-        $this->assertInternalType('array', $this->class->decode(json_encode($array), true), 'It must be a valid array');
-        $this->assertInternalType('object', $this->class->decode(json_encode($array), false), 'It must be a valid object');
+
+        $this->assertInternalType(
+            'array',
+            $this->class->decode(json_encode($array), true),
+            'It must be a valid array'
+        );
+
+        $this->assertInternalType(
+            'object',
+            $this->class->decode(json_encode($array), false),
+            'It must be a valid object'
+        );
     }
 
     /**
@@ -78,12 +105,19 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $array = ['key' => 'value'];
         $jsonEncodeTwice = json_encode(json_encode($array));
 
-        $this->assertInternalType('array', $this->class->decode($jsonEncodeTwice, true), 'It must be a valid array');
+        $this->assertInternalType(
+            'array',
+            $this->class->decode($jsonEncodeTwice, true),
+            'It must be a valid array'
+        );
     }
 
     public function testMethodEncodeShouldExist()
     {
-        $this->assertTrue(method_exists($this->class, 'encode'), 'method encode should exist');
+        $this->assertTrue(
+            method_exists($this->class, 'encode'),
+            'method encode should exist'
+        );
     }
 
     /**
@@ -102,7 +136,11 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     public function testItCanReturnAnEncodedJsonWithAnArrayPassedByParameter()
     {
         $array = ['key' => 'value'];
-        $this->assertSame('{"key":"value"}', $this->class->encode($array));
+
+        $this->assertSame(
+            '{"key":"value"}',
+            $this->class->encode($array)
+        );
     }
 
     /**
@@ -112,9 +150,24 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         $obj = new \stdClass();
         $obj->key = 'value';
-        $this->assertSame('{"key":"value"}', $this->class->encode($obj));
+
+        $this->assertSame(
+            '{"key":"value"}',
+            $this->class->encode($obj)
+        );
     }
 
+    public function testMethodIsValidShouldExist()
+    {
+        $this->assertTrue(
+            method_exists($this->class, 'isValid'),
+            'method isValid should exist'
+        );
+    }
+
+    /**
+     * @depends testMethodEncodeShouldExist
+     */
     public function testItMustReturnTrueWhenJsonIsValid()
     {
         $this->assertTrue(
@@ -122,13 +175,11 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             '"isValid" method must exist'
         );
 
-        $jsonTest = json_encode(
-            [
-                'foo',
-                'bar',
-                'foo' => 'bar'
-            ]
-        );
+        $jsonTest = json_encode([
+            'foo',
+            'bar',
+            'foo' => 'bar'
+        ]);
 
         $this->assertTrue(
             $this->class->isValid($jsonTest),
@@ -136,13 +187,11 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @depends testMethodIsValidShouldExist
+     */
     public function testItMustReturnFalseWhenJsonIsNotValid()
     {
-        $this->assertTrue(
-            method_exists($this->class, 'isValid'),
-            '"isValid" method must exist'
-        );
-
         $jsonTest = 'foobar';
 
         $this->assertFalse(
@@ -153,11 +202,6 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
     public function testItMustReturnNullWhenJsonIsNotValid()
     {
-        $this->assertTrue(
-            method_exists($this->class, 'decode'),
-            '"decode" method must exist'
-        );
-
         $jsonTest = '';
 
         $this->assertNull(

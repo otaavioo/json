@@ -1,10 +1,11 @@
 <?php
+
 namespace Json;
 
 class Json
 {
-    const T_OBJECT = false;
-    const T_ARRAY = true;
+    public const T_OBJECT = false;
+    public const T_ARRAY = true;
 
     private $type;
 

@@ -1,15 +1,18 @@
-[![Build Status](https://travis-ci.org/otaavioo/json.svg?branch=master)](https://travis-ci.org/otaavioo/json)
-[![Coverage Status](https://coveralls.io/repos/github/otaavioo/json/badge.svg?branch=master)](https://coveralls.io/github/otaavioo/json?branch=master)
+# JSON
+
+[![Build Status](https://travis-ci.org/otaavioo/json.svg?branch=main)](https://travis-ci.org/otaavioo/json)
+[![Coverage Status](https://coveralls.io/repos/github/otaavioo/json/badge.svg?branch=master)](https://coveralls.io/github/otaavioo/json?branch=main)
 
 A light package for json encode/decode functions
 
 ## Installing
 
-```
-composer require otaavioo/json ^1.0
+```sh
+composer require otaavioo/json ^2.0
 ```
 
-#### Encode
+### Encode
+
 ```php
     // Instantiate the class
     $json = new Json();
@@ -20,7 +23,8 @@ composer require otaavioo/json ^1.0
     echo $json->encode($array);
 ```
 
-#### Decode
+### Decode
+
 ```php
     // Instantiate the class
     $json = new Json();
