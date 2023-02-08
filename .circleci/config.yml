@@ -10,14 +10,15 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
       # Specify the version you desire here
-      - image: cimg/php:7.0
+      - image: cimg/php:7.2
 
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
 
-      - run: sudo apt update && sudo apt install php7.0-json
+      - run: sudo apt update
+      - run: sudo docker-php-ext-install json
       - run: composer install -n --prefer-dist
 
       # run tests with phpunit
