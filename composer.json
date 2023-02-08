@@ -26,5 +26,9 @@
         },
         "sort-packages": true
     },
+    "scripts": {
+        "test-coverage-html": "vendor/bin/phpunit --coverage-html build/logs/html",
+        "test-coverage-clover": "vendor/bin/phpunit --coverage-clover build/logs/clover.xml"
+    },
     "license": "MIT"
 }
