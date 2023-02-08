@@ -77,5 +77,5 @@ workflows:
       - test-7.3
       - test-7.4
       - test-8.0
-      - test-7.1
+      - test-8.1
       - test-8.2
