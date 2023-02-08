@@ -17,8 +17,7 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo apt update && sudo apt install php-json
-      - run: sudo docker-php-ext-install json
+      - run: sudo apt update && sudo apt install php7.0-json
       - run: composer install -n --prefer-dist
 
       # run tests with phpunit
