@@ -1,6 +1,6 @@
 # JSON
 
-[![Build Status](https://circleci.com/gh/otaavioo/json/tree/main.svg?style=shield)](https://circleci.com/gh/otaavioo/json/?branch=main)
+[![Build](https://github.com/otaavioo/json/actions/workflows/php.yml/badge.svg)](https://github.com/otaavioo/json/actions/workflows/php.yml)
 [![Coverage Status](https://coveralls.io/repos/github/otaavioo/json/badge.svg?branch=main)](https://coveralls.io/github/otaavioo/json?branch=main)
 
 A light package for json encode/decode functions
