@@ -18,7 +18,7 @@ jobs:
       - checkout
 
       - run: sudo apt update
-      - run: sudo docker-php-ext-install json
+      - run: sudo -E install-php-extensions json
       - run: composer install -n --prefer-dist
 
       # run tests with phpunit
