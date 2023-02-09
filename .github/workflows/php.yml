@@ -52,7 +52,7 @@ jobs:
     - name: PHP setup
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php-versoin }}
+        php-version: ${{ matrix.php-version }}
         ini-values: zend.assertions=1, error_reporting=-1, display_errors=On, log_errors_max_len=0
         coverage: xdebug
 
