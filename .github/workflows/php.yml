@@ -1,0 +1,90 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  composer-check:
+    name: Composer Check
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer install --no-interaction --no-ansi --no-progress --prefer-dist
+
+  unit-test:
+    needs: composer-check
+    name: Unit Test
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+        - '7.2'
+        - '7.3'
+        - '7.4'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: PHP setup
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        ini-values: zend.assertions=1, error_reporting=-1, display_errors=On, log_errors_max_len=0
+        coverage: xdebug
+
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Install dependencies
+      run: composer install --no-interaction --no-ansi --no-progress --prefer-dist
+
+    - name: Run test suite
+      run: php vendor/bin/phpunit -v --coverage-clover build/logs/clover.xml
+
+    - name: Install php-coveralls
+      run: composer global require -o --no-interaction --no-progress php-coveralls/php-coveralls
+
+    - name: Upload coverage results to Coveralls
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_PARALLEL: true
+        COVERALLS_FLAG_NAME: "PHP${{matrix.php-version}}"
+      run: |
+        export PATH="$(composer config -g home)/vendor/bin:$PATH"
+        php-coveralls -x build/logs/clover.xml -v
+
+  coveralls-finish:
+    needs: unit-test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel-finished: true
