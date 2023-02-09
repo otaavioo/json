@@ -67,7 +67,7 @@ jobs:
         XDEBUG_MODE: coverage
 
     - name: Coveralls
-      run: php vendor/bin/php-coveralls -v
+      run: php vendor/bin/php-coveralls -v -r .
       env:
         COVERALLS_RUN_LOCALLY: ${{secrets.COVERALLS_RUN_LOCALLY}}
         COVERALLS_REPO_TOKEN: ${{secrets.COVERALLS_REPO_TOKEN}}
