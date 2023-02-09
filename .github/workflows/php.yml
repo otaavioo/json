@@ -85,5 +85,5 @@ jobs:
         max_attempts: 1
         command: |
           export PATH="$(composer config -g home)/vendor/bin:$PATH"
-          php-coveralls -x build/logs/clover.xml -v -s src/
+          php-coveralls -x build/logs/clover.xml -v -r src/
 
