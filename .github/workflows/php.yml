@@ -34,6 +34,7 @@ jobs:
       run: composer install --no-interaction --no-ansi --no-progress --prefer-dist
 
   unit-test:
+    needs: composer-check
     name: Unit Test
 
     runs-on: ubuntu-latest
@@ -69,21 +70,21 @@ jobs:
     - name: Install php-coveralls
       run: composer global require -o --no-interaction --no-progress php-coveralls/php-coveralls
 
-    # - name: Upload coverage results to Coveralls
-    #   env:
-    #     COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #     COVERALLS_PARALLEL: true
-    #     COVERALLS_FLAG_NAME: "PHP${{matrix.php-version}}"
-    #   run: |
-    #     export PATH="$(composer config -g home)/vendor/bin:$PATH"
-    #     php-coveralls -x build/logs/clover.xml -v
+    - name: Upload coverage results to Coveralls
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_PARALLEL: true
+        COVERALLS_FLAG_NAME: "PHP${{matrix.php-version}}"
+      run: |
+        export PATH="$(composer config -g home)/vendor/bin:$PATH"
+        php-coveralls -x build/logs/clover.xml -v
 
-    - name: Coveralls Parallel
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        flag-name: "PHP${{matrix.php-version}}"
-        parallel: true
+    # - name: Coveralls Parallel
+    #   uses: coverallsapp/github-action@master
+    #   with:
+    #     github-token: ${{ secrets.GITHUB_TOKEN }}
+    #     flag-name: "PHP${{matrix.php-version}}"
+    #     parallel: true
 
 #   coveralls-finish:
 #     needs: unit-test
