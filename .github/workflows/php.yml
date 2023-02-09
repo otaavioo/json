@@ -49,6 +49,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: PHP setup
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versoin }}
+        ini-values: zend.assertions=1, error_reporting=-1, display_errors=On, log_errors_max_len=0
+        coverage: xdebug
+
+
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
