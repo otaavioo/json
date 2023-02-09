@@ -31,7 +31,7 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: Install dependencies
-      run: composer installcomposer install --no-interaction --no-ansi --no-progress --prefer-dist
+      run: composer install --no-interaction --no-ansi --no-progress --prefer-dist
 
   unit-test:
     name: Unit Test
@@ -107,4 +107,4 @@ jobs:
       run: |
         export PATH="$(composer config -g home)/vendor/bin:$PATH"
         cat build/logs/clover.xml
-        php-coveralls -x build/logs/clover.xml -v -r .
+        php-coveralls -x build/logs/clover.xml -v
