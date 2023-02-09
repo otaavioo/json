@@ -67,7 +67,7 @@ jobs:
         XDEBUG_MODE: coverage
 
     - name: Coveralls
-      run: php vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v --json_path=build/logs/
+      run: php vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v --json_path=build/logs/coveralls-upload.json
       env:
         COVERALLS_RUN_LOCALLY: ${{secrets.COVERALLS_RUN_LOCALLY}}
         COVERALLS_REPO_TOKEN: ${{secrets.COVERALLS_REPO_TOKEN}}
