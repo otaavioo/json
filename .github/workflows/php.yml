@@ -55,36 +55,49 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    - name: Run test suite
-      uses: php-actions/phpunit@v3
-      with:
-        version: 6.0
-        php_version: ${{ matrix.php-version }}
-        php_extensions: xdebug
-        configuration: phpunit.xml
-        args: --coverage-clover build/logs/clover.xml
-      env:
-        XDEBUG_MODE: coverage
+    # - name: Run test suite
+    #   uses: php-actions/phpunit@v3
+    #   with:
+    #     version: 6.0
+    #     php_version: ${{ matrix.php-version }}
+    #     php_extensions: xdebug
+    #     configuration: phpunit.xml
+    #     args: --coverage-clover build/logs/clover.xml
+    #   env:
+    #     XDEBUG_MODE: coverage
 
 #     - name: Coveralls
 #       run: php vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v --json_path=build/logs/coveralls-upload.json --root_dir=.
 #       env:
 #         COVERALLS_RUN_LOCALLY: ${{secrets.COVERALLS_RUN_LOCALLY}}
 #         COVERALLS_REPO_TOKEN: ${{secrets.COVERALLS_REPO_TOKEN}}
-    - name: Install php-coveralls
-      run: composer global require -o --no-interaction --no-progress php-coveralls/php-coveralls
+    # - name: Install php-coveralls
+    #   run: composer global require -o --no-interaction --no-progress php-coveralls/php-coveralls
+
+    # - name: Upload coverage results to Coveralls
+    #   uses: nick-invision/retry@v2
+    #   env:
+    #     COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     COVERALLS_PARALLEL: true
+    #     COVERALLS_FLAG_NAME: "PHP${{ matrix.php-version }}"
+    #   with:
+    #     timeout_seconds: 20
+    #     max_attempts: 1
+    #     command: |
+    #       export PATH="$(composer config -g home)/vendor/bin:$PATH"
+    #       cat build/logs/clover.xml
+    #       php-coveralls -x build/logs/clover.xml -v -r .
+
+    - name: Run test suite
+      run: php vendor/bin/phpunit -v --coverage-clover build/logs/clover.xml
 
     - name: Upload coverage results to Coveralls
-      uses: nick-invision/retry@v2
+      if: matrix.coverage
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_PARALLEL: true
-        COVERALLS_FLAG_NAME: "PHP${{ matrix.php-version }}"
-      with:
-        timeout_seconds: 20
-        max_attempts: 1
-        command: |
-          export PATH="$(composer config -g home)/vendor/bin:$PATH"
-          cat build/logs/clover.xml
-          php-coveralls -x build/logs/clover.xml -v -r .
-
+        COVERALLS_FLAG_NAME: "PHP${{matrix.php-version}}"
+      run: |
+        export PATH="$(composer config -g home)/vendor/bin:$PATH"
+        cat build/logs/clover.xml
+        php-coveralls -x build/logs/clover.xml -v -r .
