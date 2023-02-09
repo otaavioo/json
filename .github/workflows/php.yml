@@ -79,7 +79,7 @@ jobs:
         php-coveralls -x build/logs/clover.xml -v
 
   coveralls-finish:
-    needs: tests
+    needs: unit-test
     runs-on: ubuntu-latest
     steps:
       - name: Notify Coveralls when build is finished
