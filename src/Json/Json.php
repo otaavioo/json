@@ -9,22 +9,34 @@ class Json
 
     private $type;
 
-    public function decode(string $json, $type = self::T_OBJECT)
+    public function decode($json, $type = self::T_OBJECT)
     {
         if (empty($json)) {
             return null;
         }
 
+        if (is_array($json) && self::T_ARRAY === $type) {
+            return $json;
+        }
+
+        if (is_object($json) && self::T_OBJECT === $type) {
+            return $json;
+        }
+
+        if (is_array($json) || is_object($json)) {
+            $json = $this->encode($json);
+        }
+
         $this->type = $type;
 
         if (!in_array($this->type, [self::T_OBJECT, self::T_ARRAY], true)) {
-            throw new \InvalidArgumentException("Invalid decode type: $this->type", 1000);
+            throw new \InvalidArgumentException(sprintf('Invalid decode type: %s', $this->type), 1000);
         }
 
         $jsonDecode = $this->decodeRecursive($json, $this->type);
 
         if ($this->hasError($jsonDecode)) {
-            throw new \InvalidArgumentException("Invalid Json: $json", 1001);
+            throw new \InvalidArgumentException(sprintf('Invalid Json: %s', $json), 1001);
         }
 
         return $jsonDecode;
@@ -34,7 +46,7 @@ class Json
     {
         $jsonEncode = json_encode($json);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (JSON_ERROR_NONE !== json_last_error()) {
             throw new \Exception('Json encode error: ' . json_last_error_msg());
         }
 
@@ -43,8 +55,9 @@ class Json
 
     public function hasError($json): bool
     {
-        $isArrayOrObject = ($this->type === self::T_OBJECT) ? !is_object($json) : !is_array($json);
-        return (json_last_error() !== JSON_ERROR_NONE) || is_null($json) || $isArrayOrObject;
+        $isArrayOrObject = (self::T_OBJECT === $this->type) ? !is_object($json) : !is_array($json);
+
+        return (JSON_ERROR_NONE !== json_last_error()) || is_null($json) || $isArrayOrObject;
     }
 
     private function decodeRecursive($json)
@@ -61,6 +74,7 @@ class Json
     public function isValid(string $json): bool
     {
         $obj = json_decode($json);
-        return (json_last_error() == JSON_ERROR_NONE) && !is_null($obj) && $json != $obj;
+
+        return (JSON_ERROR_NONE === json_last_error()) && !is_null($obj) && $json != $obj;
     }
 }

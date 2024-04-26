@@ -2,9 +2,11 @@
 
 namespace Json;
 
-use Json\Json;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class JsonTest extends TestCase
 {
     private $class;
@@ -52,7 +54,7 @@ class JsonTest extends TestCase
 
     /**
      * @depends testMethodDecodeShouldExist
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testItMustThrowInvalidArgumentExceptionIfReceivesInvalidJson()
     {
@@ -61,7 +63,7 @@ class JsonTest extends TestCase
 
     /**
      * @depends testMethodDecodeShouldExist
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testItMustThrowInvalidArgumentExceptionIfReceivesInvalidType2()
     {
@@ -70,7 +72,7 @@ class JsonTest extends TestCase
 
     /**
      * @depends testMethodDecodeShouldExist
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testItMustThrowInvalidArgumentExceptionIfReceivesInvalidType()
     {
@@ -78,23 +80,40 @@ class JsonTest extends TestCase
     }
 
     /**
+     * @dataProvider providerNoAccessLevel
      * @depends testMethodDecodeShouldExist
+     * @param mixed $decode
      */
-    public function testItCanReturnADecodedJson()
+    public function testItCanReturnADecodedJson($decode)
     {
-        $array = ['key' => 'value'];
-
         $this->assertInternalType(
             'array',
-            $this->class->decode(json_encode($array), true),
+            $this->class->decode($decode, true),
             'It must be a valid array'
         );
 
         $this->assertInternalType(
             'object',
-            $this->class->decode(json_encode($array), false),
-            'It must be a valid object'
+            $this->class->decode($decode, false),
+            'It must be a valid array'
         );
+    }
+
+    public function providerNoAccessLevel()
+    {
+        $array = ['key' => 'value'];
+
+        return [
+            [
+                $array,
+            ],
+            [
+                (object) $array,
+            ],
+            [
+                json_encode($array),
+            ],
+        ];
     }
 
     /**
@@ -122,7 +141,7 @@ class JsonTest extends TestCase
 
     /**
      * @depends testMethodEncodeShouldExist
-     * @expectedException Exception
+     * @expectedException \Exception
      * @expectedExceptionMessage Json encode error: Malformed UTF-8 characters, possibly incorrectly encoded
      */
     public function testItMustThrowInvalidArgumentExceptionIfReceivesInvalidArray()
@@ -178,7 +197,7 @@ class JsonTest extends TestCase
         $jsonTest = json_encode([
             'foo',
             'bar',
-            'foo' => 'bar'
+            'foo' => 'bar',
         ]);
 
         $this->assertTrue(
